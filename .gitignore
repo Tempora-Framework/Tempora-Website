@@ -1,0 +1,10 @@
+.vscode
+.idea
+
+vendor
+.env
+logs/*
+src/cache/*
+!.gitkeep
+public/assets/*
+*.min.*

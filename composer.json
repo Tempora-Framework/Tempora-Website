@@ -1,0 +1,25 @@
+{
+	"name": "tempora/tempora-website",
+
+	"repositories": {
+		"tempora": {
+			"type": "path",
+			"url": "../Tempora",
+			"options": {
+				"symlink": true
+			}
+		}
+	},
+
+	"require": {
+		"php": "^8.4",
+		"tempora-framework/tempora": "dev-dev",
+		"league/commonmark": "^2.7"
+	},
+
+	"autoload": {
+		"psr-4": {
+			"App\\": "src/"
+		}
+	}
+}
