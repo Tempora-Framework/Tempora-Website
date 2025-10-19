@@ -21,10 +21,10 @@ class ArticleRepository extends Article {
 
 		try {
 			ApplicationData::request(
-				query: "INSERT INTO " . Table::ARTICLES->value . " (uid, name) VALUES (:uid, :name)",
+				query: "INSERT INTO " . Table::ARTICLES->value . " (uid, uri) VALUES (:uid, :uri)",
 				data: [
 					"uid" => $this->getUid(),
-					"name" => $this->getName()
+					"uri" => $this->getUri()
 				]
 			);
 		} catch (Exception $exception) {
@@ -37,13 +37,14 @@ class ArticleRepository extends Article {
 	/**
 	 * Hydrate user data from database
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function hydrate(): self {
+	public function hydrate(): static {
 		$userData = ApplicationData::request(
-			query: "SELECT uid, name, uid_creator, uid_category, content FROM " . Table::ARTICLES->value . " WHERE uid = :uid",
+			query: "SELECT a.uid, a.uri, c.uid_creator, a.uid_category, c.content FROM " . Table::ARTICLES->value . " a, " . Table::CONTENTS->value . " c WHERE a.uid = :uid AND a.uid = c.uid_article AND c.code_language = :code_language",
 			data: [
-				"uid" => $this->getUid()
+				"uid" => $this->getUid(),
+				"code_language" => $this->getLanguageCode()
 			],
 			returnType: PDO::FETCH_ASSOC,
 			singleValue: true
@@ -51,7 +52,7 @@ class ArticleRepository extends Article {
 
 		if ($userData != null) {
 			if ($this->getUid() == null) $this->setUid(uid: $userData["uid"]);
-			if ($this->getName() == null) $this->setName(name: $userData["name"]);
+			if ($this->getUri() == null) $this->setUri(uri: $userData["uri"]);
 			if ($this->getCategoryRepository() == null) $this->setCategoryRepository(categoryRepository: (new CategoryRepository())->setUid(uid: $userData["uid_category"])->hydrate());
 			if ($this->getContent() == null) $this->setContent(content: $userData["content"]);
 			if ($this->getCreatorRepository() == null) $this->setCreatorRepository(creatorRepository: (new UserRepository())->setUid(uid: $userData["uid_category"])->hydrate());
@@ -64,17 +65,17 @@ class ArticleRepository extends Article {
 	/**
 	 * Get uid with names
 	 *
-	 * @param string $name
+	 * @param string $uri
 	 * @param string $categoryUid
 	 * @param string $versionId
 	 *
 	 * @return null | string
 	 */
-	public static function getUidByNames(string $name, string $categoryUid, string $versionId): null | string {
+	public static function getUidByNames(string $uri, string $categoryUid, int $versionId): null | string {
 		return ApplicationData::request(
-			query: "SELECT a.uid FROM " . Table::ARTICLES->value . " a JOIN " . Table::ARTICLE_VERSIONS->value . " av ON a.uid = av.uid_article WHERE a.name = :name AND a.uid_category = :uid_category AND av.id_version = :id_version",
+			query: "SELECT a.uid FROM " . Table::ARTICLES->value . " a JOIN " . Table::ARTICLE_VERSIONS->value . " av ON a.uid = av.uid_article WHERE a.uri = :uri AND a.uid_category = :uid_category AND av.id_version = :id_version",
 			data: [
-				"name" => $name,
+				"uri" => $uri,
 				"uid_category" => $categoryUid,
 				"id_version" => $versionId
 			],

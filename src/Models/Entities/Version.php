@@ -20,9 +20,9 @@ class Version {
 	 *
 	 * @param int $uid
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function setId(int $id): self {
+	public function setId(int $id): static {
 		$this->id = $id;
 
 		return $this;
@@ -42,9 +42,9 @@ class Version {
 	 *
 	 * @param string $name
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function setName(string $name): self {
+	public function setName(string $name): static {
 		$this->name = $name;
 
 		return $this;

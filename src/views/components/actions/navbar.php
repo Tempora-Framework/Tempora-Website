@@ -1,8 +1,10 @@
 <?php
 	use App\Enums\Path;
 	use App\Enums\Role;
+	use App\Models\Repositories\VersionRepository;
 	use Tempora\Utils\Cache\Route;
 	use Tempora\Utils\ElementBuilder\ElementBuilder;
+	use Tempora\Utils\ElementBuilder\Select;
 	use Tempora\Utils\Lang;
 	use Tempora\Utils\Minifier\Image;
 
@@ -71,6 +73,7 @@
 							"href" => Route::getPath(
 								name: "app_documentation_get",
 								options: [
+									"language" => $_COOKIE["LANG"] ?? $_ENV["DEFAULT_LANGUAGE"],
 									"category" => "getting-started",
 									"article" => "introduction",
 								]

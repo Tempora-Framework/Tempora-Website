@@ -88,3 +88,81 @@ CREATE TABLE `user_reset_password` (
 	PRIMARY KEY (`uid_user`),
 	CONSTRAINT `user_reset_password_users_FK` FOREIGN KEY (`uid_user`) REFERENCES `users` (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Table structure for table `categories`
+--
+
+CREATE TABLE IF NOT EXISTS categories (
+	uid varchar(32) NOT NULL PRIMARY KEY,
+	uri varchar(255) NOT NULL,
+	position int NOT NULL
+);
+
+--
+-- Table structure for table `articles`
+--
+
+CREATE TABLE IF NOT EXISTS articles (
+	uid varchar(32) NOT NULL PRIMARY KEY,
+	uid_category varchar(32) NOT NULL,
+	uri varchar(255) NOT NULL,
+	CONSTRAINT articles_categories_FK FOREIGN KEY (uid_category) REFERENCES categories (uid)
+);
+
+--
+-- Table structure for table `languages`
+--
+
+CREATE TABLE IF NOT EXISTS languages (
+	code varchar(7) NOT NULL PRIMARY KEY
+) COLLATE = utf8mb4_general_ci;
+
+--
+-- Table structure for table `category_names`
+--
+
+CREATE TABLE IF NOT EXISTS category_names (
+	uid varchar(32) NOT NULL PRIMARY KEY,
+	uid_category varchar(32) NOT NULL,
+	name varchar(255) NOT NULL,
+	code_language varchar(7) NOT NULL,
+	CONSTRAINT category_names_categories_FK FOREIGN KEY (uid_category) REFERENCES categories (uid),
+	CONSTRAINT category_names_languages_code_FK FOREIGN KEY (code_language) REFERENCES languages (code)
+) COLLATE = utf8mb4_general_ci;
+
+--
+-- Table structure for table `article_names`
+--
+
+CREATE TABLE IF NOT EXISTS contents (
+	uid varchar(32) NOT NULL PRIMARY KEY,
+	uid_article varchar(32) NOT NULL,
+	uid_creator varchar(32) NULL,
+	content text NOT NULL,
+	display_name varchar(255) NOT NULL,
+	code_language varchar(7) NOT NULL,
+	CONSTRAINT contents_articles_FK FOREIGN KEY (uid_article) REFERENCES articles (uid),
+	CONSTRAINT contents_languages_code_FK FOREIGN KEY (code_language) REFERENCES languages (code),
+	CONSTRAINT contents_users_FK FOREIGN KEY (uid_creator) REFERENCES users (uid)
+) COLLATE = utf8mb4_general_ci;
+
+--
+-- Table structure for table `versions`
+--
+
+CREATE TABLE IF NOT EXISTS versions (
+	id int NOT NULL PRIMARY KEY,
+	name varchar(10) NOT NULL
+);
+
+--
+-- Table structure for table `article_versions`
+--
+
+CREATE TABLE IF NOT EXISTS article_versions (
+	uid_article varchar(32) NOT NULL,
+	id_version int NOT NULL,
+	CONSTRAINT article_versions_articles_FK FOREIGN KEY (uid_article) REFERENCES articles (uid),
+	CONSTRAINT article_versions_versions_FK FOREIGN KEY (id_version) REFERENCES versions (id)
+);

@@ -147,6 +147,17 @@ if (isElementExist(langSelection)) {
 	})
 }
 
+// Version selection
+versionSelection = document.getElementById("version_selection");
+if (isElementExist(versionSelection)) {
+	versionSelection.addEventListener("change", () => {
+		let version = versionSelection.options[versionSelection.selectedIndex].text.replace("v", "");
+		let url = new URL(window.location);
+		url.searchParams.set("version", version);
+		window.location.href = url;
+	})
+}
+
 // Notifications
 let notification = decodeURIComponent(getCookie("NOTIFICATION"));
 if (notification) {

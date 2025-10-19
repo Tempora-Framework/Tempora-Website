@@ -13,7 +13,7 @@ $options = [
 	"remove_empty_lines",
 	// "remove_new_lines",
 	"remove_comments",
-	// "collapsed_spaces",
+	"collapsed_spaces",
 ];
 
 new Tempora\Tempora(options: $options);

@@ -7,11 +7,12 @@ use App\Models\Repositories\UserRepository;
 
 class Article {
 	private ?string $uid = null;
-	private ?string $name = null;
+	private ?string $uri = null;
 	private ?CategoryRepository $categoryRepository = null;
 	private ?string $content = null;
 	private ?UserRepository $creatorRepository = null;
 	private ?array $versions = [];
+	private ?string $languageCode = null;
 
 	/**
 	 * Get the value of uid
@@ -27,9 +28,9 @@ class Article {
 	 *
 	 * @param string $uid
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function setUid(string $uid): self {
+	public function setUid(string $uid): static {
 		$this->uid = $uid;
 
 		return $this;
@@ -40,19 +41,19 @@ class Article {
 	 *
 	 * @return string | null
 	 */
-	public function getName(): string | null {
-		return $this->name;
+	public function getUri(): string | null {
+		return $this->uri;
 	}
 
 	/**
 	 * Set the value of name
 	 *
-	 * @param string $name
+	 * @param string $uri
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function setName(string $name): self {
-		$this->name = $name;
+	public function setUri(string $uri): static {
+		$this->uri = $uri;
 
 		return $this;
 	}
@@ -71,9 +72,9 @@ class Article {
 	 *
 	 * @param CategoryRepository $categoryRepository
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function setCategoryRepository(CategoryRepository $categoryRepository): self {
+	public function setCategoryRepository(CategoryRepository $categoryRepository): static {
 		$this->categoryRepository = $categoryRepository;
 
 		return $this;
@@ -93,9 +94,9 @@ class Article {
 	 *
 	 * @param string $content
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function setContent(string $content): self {
+	public function setContent(string $content): static {
 		$this->content = $content;
 
 		return $this;
@@ -115,9 +116,9 @@ class Article {
 	 *
 	 * @param UserRepository $creatorRepository
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function setCreatorRepository(UserRepository $creatorRepository): self {
+	public function setCreatorRepository(UserRepository $creatorRepository): static {
 		$this->creatorRepository = $creatorRepository;
 
 		return $this;
@@ -137,10 +138,32 @@ class Article {
 	 *
 	 * @param array $versions
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function setVersions(array $versions): self {
+	public function setVersions(array $versions): static {
 		$this->versions = $versions;
+
+		return $this;
+	}
+
+	/**
+	 * Get the value of languageCode
+	 *
+	 * @return string
+	 */
+	public function getLanguageCode(): string {
+		return $this->languageCode;
+	}
+
+	/**
+	 * Set the value of languageCode
+	 *
+	 * @param string $languageCode
+	 *
+	 * @return static
+	 */
+	public function setLanguageCode(string $languageCode): static {
+		$this->languageCode = $languageCode;
 
 		return $this;
 	}

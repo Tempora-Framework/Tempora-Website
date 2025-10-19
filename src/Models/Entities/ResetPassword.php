@@ -25,9 +25,9 @@ class ResetPassword {
 	 *
 	 * @param string $uid
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function setUid(?string $uid = null): self {
+	public function setUid(?string $uid = null): static {
 		if ($uid) {
 			$this->uid = $uid;
 		} else {
@@ -58,9 +58,9 @@ class ResetPassword {
 	 *
 	 * @param string $link
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function setLink(string $link): self {
+	public function setLink(string $link): static {
 		$this->link = $link;
 
 		return $this;
@@ -80,9 +80,9 @@ class ResetPassword {
 	 *
 	 * @param string $email
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function setEmail(string $email): self {
+	public function setEmail(string $email): static {
 		$this->email = $email;
 
 		return $this;

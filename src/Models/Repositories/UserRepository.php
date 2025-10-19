@@ -45,9 +45,9 @@ class UserRepository extends User {
 	/**
 	 * Hydrate user data from database
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function hydrate(): self {
+	public function hydrate(): static {
 		$userData = ApplicationData::request(
 			query: "SELECT uid, name, surname, email, to_modify FROM " . Table::USERS->value . " WHERE uid = :uid",
 			data: [

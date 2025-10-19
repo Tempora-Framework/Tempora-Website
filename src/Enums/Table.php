@@ -7,4 +7,7 @@ enum Table: string {
 	case CATEGORIES = "categories";
 	case VERSIONS = "versions";
 	case ARTICLE_VERSIONS = "article_versions";
+	case CONTENTS = "contents";
+	case LANGUAGES = "languages";
+	case CATEGORY_NAMES = "category_names";
 }

@@ -7,7 +7,6 @@ use App\Models\Entities\Version;
 use Exception;
 use PDO;
 use Tempora\Utils\ApplicationData;
-use Tempora\Utils\System;
 
 class VersionRepository extends Version {
 
@@ -43,9 +42,9 @@ class VersionRepository extends Version {
 	/**
 	 * Hydrate user data from database
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function hydrate(): self {
+	public function hydrate(): static {
 		$userData = ApplicationData::request(
 			query: "SELECT id, name FROM " . Table::VERSIONS->value . " WHERE id = :id",
 			data: [
@@ -91,6 +90,18 @@ class VersionRepository extends Version {
 			query: "SELECT MAX(id) FROM " . Table::VERSIONS->value,
 			returnType: PDO::FETCH_COLUMN,
 			singleValue: true
+		);
+	}
+
+	/**
+	 * Get all versions
+	 *
+	 * @return array
+	 */
+	public static function getAllVersions(): array {
+		return ApplicationData::request(
+			query: "SELECT id, name FROM " . Table::VERSIONS->value . " ORDER BY id DESC",
+			returnType: PDO::FETCH_ASSOC
 		);
 	}
 }

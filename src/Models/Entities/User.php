@@ -24,9 +24,9 @@ class User {
 	 *
 	 * @param string $uid
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function setUid(string $uid): self {
+	public function setUid(string $uid): static {
 		$this->uid = $uid;
 
 		return $this;
@@ -46,9 +46,9 @@ class User {
 	 *
 	 * @param string $name
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function setName(string $name): self {
+	public function setName(string $name): static {
 		$this->name = $name;
 
 		return $this;
@@ -68,9 +68,9 @@ class User {
 	 *
 	 * @param string $surname
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function setSurname(string $surname): self {
+	public function setSurname(string $surname): static {
 		$this->surname = $surname;
 
 		return $this;
@@ -90,9 +90,9 @@ class User {
 	 *
 	 * @param string $email
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function setEmail(string $email): self {
+	public function setEmail(string $email): static {
 		$this->email = $email;
 
 		return $this;
@@ -112,9 +112,9 @@ class User {
 	 *
 	 * @param string $password
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function setPassword(string $password): self {
+	public function setPassword(string $password): static {
 		$this->password = $password;
 
 		return $this;
@@ -134,9 +134,9 @@ class User {
 	 *
 	 * @param bool $toModify
 	 *
-	 * @return self
+	 * @return static
 	 */
-	public function setToModify(bool $toModify): self {
+	public function setToModify(bool $toModify): static {
 		$this->toModify = $toModify;
 
 		return $this;

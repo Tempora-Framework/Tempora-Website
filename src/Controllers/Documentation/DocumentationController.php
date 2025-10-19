@@ -6,6 +6,7 @@ use App\Controllers\ErrorController;
 use App\Enums\Path;
 use App\Models\Repositories\ArticleRepository;
 use App\Models\Repositories\CategoryRepository;
+use App\Models\Repositories\LanguageRepository;
 use App\Models\Repositories\VersionRepository;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
@@ -16,7 +17,7 @@ use Tempora\Utils\Lang;
 
 class DocumentationController extends Controller {
 	#[RouteAttribute(
-		path: '/documentation/$category/$article',
+		path: '/documentation/$language/$category/$article',
 		name: "app_documentation_get",
 		method: "GET",
 		description: "Documentation page",
@@ -29,35 +30,42 @@ class DocumentationController extends Controller {
 		$temporaVersion = $_GET["version"] ?? $temporaLatestVersion;
 		$temporaVersionId = VersionRepository::getIdByName(name: $temporaVersion);
 
+		if ($pageData["language"] === null) {
+			$this->notFound(message: Lang::translate(key: "DOCUMENTATION_NOT_FOUND_LANGUAGE"));
+
+			return;
+		}
+
 		if ($temporaVersionId === null) {
-			$this->notFound(Lang::translate(key: "DOCUMENTATION_NOT_FOUND_VERSION"));
+			$this->notFound(message: Lang::translate(key: "DOCUMENTATION_NOT_FOUND_VERSION"));
 
 			return;
 		}
 
-		$cartegoryUid = CategoryRepository::getUidByName(name: $pageData["category"]);
+		$categoryUid = CategoryRepository::getUidByName(uri: $pageData["category"]);
 
-		if ($cartegoryUid === null) {
-			$this->notFound(Lang::translate(key: "DOCUMENTATION_NOT_FOUND_CATEGORY"));
+		if ($categoryUid === null) {
+			$this->notFound(message: Lang::translate(key: "DOCUMENTATION_NOT_FOUND_CATEGORY"));
 
 			return;
 		}
 
-		$articleUid = ArticleRepository::getUidByNames(name: $pageData["article"], categoryUid: $cartegoryUid, versionId: $temporaVersionId);
+		$articleUid = ArticleRepository::getUidByNames(uri: $pageData["article"], categoryUid: $categoryUid, versionId: $temporaVersionId);
 
 		if (
 			$articleUid == null
-			|| $cartegoryUid == null
+			|| $categoryUid == null
 			|| $temporaVersionId == null
 		) {
-			$this->notFound(Lang::translate(key: "DOCUMENTATION_NOT_FOUND_ARTICLE"));
+			$this->notFound(message: Lang::translate(key: "DOCUMENTATION_NOT_FOUND_ARTICLE"));
 
 			return;
 		}
 
 		$categoryRepository = new CategoryRepository();
 		$categoryRepository
-			->setUid(uid: $cartegoryUid)
+			->setUid(uid: $categoryUid)
+			->setLanguageCode(languageCode: $pageData["language"])
 			->hydrate()
 		;
 
@@ -65,8 +73,15 @@ class DocumentationController extends Controller {
 		$articleRepository
 			->setUid(uid: $articleUid)
 			->setCategoryRepository(categoryRepository: $categoryRepository)
+			->setLanguageCode(languageCode: $pageData["language"])
 			->hydrate()
 		;
+
+		if ($articleRepository->getContent() == null) {
+			$this->notFound(message: Lang::translate(key: "DOCUMENTATION_NOT_FOUND_ARTICLE"));
+
+			return;
+		}
 
 		// Markdown conversion
 		$environment = new Environment(config: [
@@ -83,14 +98,13 @@ class DocumentationController extends Controller {
 		$this->setStyles(styles: [
 			"/assets/styles/main.css",
 			"/assets/styles/remixicon.css",
-			"/assets/styles/prism-tomorrow.css",
+			"/assets/styles/prism.css",
 		]);
 
 		$this->setScripts(scripts: [
 			"/assets/scripts/engine.js",
 			"/assets/scripts/theme.js",
-			"/assets/scripts/prism/prism-core.js",
-			"/assets/scripts/prism/prism-autoloader.js",
+			"/assets/scripts/prism.js",
 		]);
 
 		require Path::LAYOUT->value . "/header.php";
