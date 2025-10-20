@@ -6,7 +6,6 @@ use App\Controllers\ErrorController;
 use App\Enums\Path;
 use App\Models\Repositories\ArticleRepository;
 use App\Models\Repositories\CategoryRepository;
-use App\Models\Repositories\LanguageRepository;
 use App\Models\Repositories\VersionRepository;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;

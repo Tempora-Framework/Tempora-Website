@@ -12,10 +12,10 @@ use Tempora\Utils\Cookie;
 use Tempora\Utils\Lang;
 use Tempora\Utils\System;
 
-class DashboardAddCategoryEventController extends Controller {
+class DashboardDeleteCategoryEventController extends Controller {
 	#[RouteAttribute(
-		path: "/dashboard/category/add",
-		name: "app_dashboard_add_category_post",
+		path: '/dashboard/category/delete',
+		name: "app_dashboard_delete_category_post",
 		method: "POST",
 		needLoginToBe: true,
 		accessRoles: [
@@ -24,12 +24,12 @@ class DashboardAddCategoryEventController extends Controller {
 	)]
 
 	public function __invoke(): void {
+		$pageData = $this->getPageData();
+
 		if (
 			System::checkCSRF()
-			&& isset($_POST["uri"])
-			&& isset($_POST["name"])
 			&& isset($_POST["language"])
-			&& isset($_POST["position"])
+			&& isset($_POST["categoryUid"])
 		) {
 			$notificationCookie = new Cookie;
 			$notificationCookie->setName(name: "NOTIFICATION");
@@ -38,27 +38,16 @@ class DashboardAddCategoryEventController extends Controller {
 			if (in_array(needle: $_POST["language"], haystack: $languageList)) {
 				$categoryRepository = new CategoryRepository;
 				$categoryRepository
-					->setUri(uri: $_POST["uri"])
-					->setName(name: $_POST["name"])
+					->setUid(uid: $_POST["categoryUid"])
 					->setLanguageCode(languageCode: $_POST["language"])
-					->setPosition(position: (int)$_POST["position"])
 				;
-				$categoryRepository->create();
-
-				System::redirect(url: Route::getPath(name: "app_dashboard_category_get"));
+				$categoryRepository->delete();
 			} else {
 				$notificationCookie->setValue(value: Lang::translate(key: "REGISTER_UNIDENTICAL_PASSWORD"));
 				$notificationCookie->send();
 			}
-
-			$_SESSION["page_data"] = [
-				"form_category_name" => $_POST["name"],
-				"form_category_uri" => $_POST["uri"],
-				"form_category_language" => $_POST["language"],
-				"form_category_position" => $_POST["position"]
-			];
 		}
 
-		System::redirect();
+		System::redirect(url: Route::getPath(name: "app_dashboard_category_get"));
 	}
 }

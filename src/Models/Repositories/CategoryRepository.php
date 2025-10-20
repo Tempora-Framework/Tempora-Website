@@ -99,6 +99,33 @@ class CategoryRepository extends Category {
 		return true;
 	}
 
+	public function delete(): Exception | bool {
+		try {
+			$categoryNameUid = $this->getCategoryNameUid(
+				categoryUid: $this->getUid(),
+				languageCode: $this->getLanguageCode()
+			);
+
+			ApplicationData::request(
+				query: "DELETE FROM " . Table::CATEGORY_NAMES->value . " WHERE uid = :uid",
+				data: [
+					"uid" => $categoryNameUid
+				]
+			);
+
+			ApplicationData::request(
+				query: "DELETE FROM " . Table::CATEGORIES->value . " WHERE uid = :uid",
+				data: [
+					"uid" => $this->getUid()
+				]
+			);
+		} catch (Exception $exception) {
+			return $exception;
+		}
+
+		return true;
+	}
+
 	/**
 	 * Get uid with name
 	 *

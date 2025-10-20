@@ -15,7 +15,7 @@ use Tempora\Utils\System;
 class DashboardUpdateCategoryEventController extends Controller {
 	#[RouteAttribute(
 		path: '/dashboard/category/update/$language/$categoryUid',
-		name: "app_dashboard_add_category_post",
+		name: "app_dashboard_update_category_post",
 		method: "POST",
 		needLoginToBe: true,
 		accessRoles: [

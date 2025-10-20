@@ -11,7 +11,3 @@
 <a href="<?= Route::getPath(name: "app_dashboard_category_get") ?>" class="button button_primary">
 	<i class="ri-folder-add-line"></i> <?= Lang::translate(key: "DASHBOARD_CATEGORY_TITLE") ?>
 </a>
-<br>
-<a href="<?= Route::getPath(name: "app_dashboard_add_category_get") ?>" class="button button_primary">
-	<i class="ri-add-line"></i> <?= Lang::translate(key: "DASHBOARD_ADD_CATEGORY_TITLE") ?>
-</a>

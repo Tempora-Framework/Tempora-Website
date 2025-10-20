@@ -27,6 +27,10 @@ class DashboardCategoryController extends Controller {
 
 		$categoryList = CategoryRepository::getAllCategories();
 
+		if (!isset($_SESSION["csrf"])) {
+			$_SESSION["csrf"] = bin2hex(string: random_bytes(length: 50));
+		}
+
 		$this->setStyles(styles: [
 			"/assets/styles/main.css",
 			"/assets/styles/remixicon.css"
@@ -34,7 +38,8 @@ class DashboardCategoryController extends Controller {
 
 		$this->setScripts(scripts: [
 			"/assets/scripts/engine.js",
-			"/assets/scripts/theme.js"
+			"/assets/scripts/theme.js",
+			"/assets/scripts/category/delete.js"
 		]);
 
 		require Path::LAYOUT->value . "/header.php";
