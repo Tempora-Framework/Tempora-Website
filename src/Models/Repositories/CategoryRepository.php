@@ -153,7 +153,7 @@ class CategoryRepository extends Category {
 		return ApplicationData::request(
 			query: "SELECT c.uid, c.uri, c.position, cn.name, cn.code_language FROM " . Table::CATEGORIES->value . " c JOIN " . Table::CATEGORY_NAMES->value . " cn ON c.uid = cn.uid_category ORDER BY c.position ASC",
 			returnType: PDO::FETCH_ASSOC
-		);
+		) ?? [];
 	}
 
 	/**

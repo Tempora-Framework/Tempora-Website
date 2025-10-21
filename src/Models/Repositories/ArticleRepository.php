@@ -55,7 +55,7 @@ class ArticleRepository extends Article {
 			if ($this->getUri() == null) $this->setUri(uri: $userData["uri"]);
 			if ($this->getCategoryRepository() == null) $this->setCategoryRepository(categoryRepository: (new CategoryRepository())->setUid(uid: $userData["uid_category"])->hydrate());
 			if ($this->getContent() == null) $this->setContent(content: $userData["content"]);
-			if ($this->getCreatorRepository() == null) $this->setCreatorRepository(creatorRepository: (new UserRepository())->setUid(uid: $userData["uid_category"])->hydrate());
+			if ($this->getCreatorRepository() == null) $this->setCreatorRepository(creatorRepository: (new UserRepository())->setUid(uid: $userData["uid_creator"])->hydrate());
 			if ($this->getVersions() == null) $this->setVersions(versions: $this->hydrateVersions());
 		}
 
@@ -89,7 +89,7 @@ class ArticleRepository extends Article {
 	 *
 	 * @return array
 	 */
-	function hydrateVersions(): array {
+	public function hydrateVersions(): array {
 		return ApplicationData::request(
 			query: "SELECT v.id, v.name FROM " . Table::VERSIONS->value . " v
 			JOIN " . Table::ARTICLE_VERSIONS->value . " av ON v.id = av.id_version
@@ -99,6 +99,13 @@ class ArticleRepository extends Article {
 			],
 			returnType: PDO::FETCH_ASSOC,
 			singleValue: true
+		) ?? [];
+	}
+
+	public static function getAllArticles(): array {
+		return ApplicationData::request(
+			query: "SELECT uid_article, code_language FROM " . Table::CONTENTS->value,
+			returnType: PDO::FETCH_ASSOC
 		) ?? [];
 	}
 }

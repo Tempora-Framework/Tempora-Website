@@ -163,6 +163,7 @@ CREATE TABLE IF NOT EXISTS versions (
 CREATE TABLE IF NOT EXISTS article_versions (
 	uid_article varchar(32) NOT NULL,
 	id_version int NOT NULL,
+	CONSTRAINT article_versions_unique UNIQUE (uid_article, id_version),
 	CONSTRAINT article_versions_articles_FK FOREIGN KEY (uid_article) REFERENCES articles (uid),
 	CONSTRAINT article_versions_versions_FK FOREIGN KEY (id_version) REFERENCES versions (id)
 );

@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Controllers\Dashboard\Category;
+namespace App\Controllers\Dashboard\Article;
 
 use App\Enums\Path;
 use App\Enums\Role;
-use App\Models\Repositories\CategoryRepository;
+use App\Models\Repositories\ArticleRepository;
 use App\Models\Repositories\LanguageRepository;
 use Tempora\Attributes\RouteAttribute;
 use Tempora\Controllers\Controller;
 
-class DashboardCategoryController extends Controller {
+class DashboardArticleController extends Controller {
 	#[RouteAttribute(
-		path: "/dashboard/category",
-		name: "app_dashboard_category_get",
+		path: "/dashboard/article",
+		name: "app_dashboard_article_get",
 		method: "GET",
-		description: "Category page",
-		title: "DASHBOARD_CATEGORY_TITLE",
+		description: "Article page",
+		title: "DASHBOARD_ARTICLE_TITLE",
 		translateTitle: true,
 		needLoginToBe: true,
 		accessRoles: [
@@ -26,8 +26,12 @@ class DashboardCategoryController extends Controller {
 	public function __invoke(): void {
 		$pageData = $this->getPageData();
 
-		$categoriesList = CategoryRepository::getAllCategories();
+		$articlesList = ArticleRepository::getAllArticles();
 		$languages = LanguageRepository::getAllLangs();
+
+		foreach ($articlesList as &$article) {
+			$article = (new ArticleRepository())->setUid(uid: $article["uid_article"])->setLanguageCode($article["code_language"])->hydrate();
+		}
 
 		if (!isset($_SESSION["csrf"])) {
 			$_SESSION["csrf"] = bin2hex(string: random_bytes(length: 50));
@@ -46,7 +50,7 @@ class DashboardCategoryController extends Controller {
 
 		require Path::LAYOUT->value . "/header.php";
 
-		require Path::LAYOUT->value . "/dashboard/category/index.php";
+		require Path::LAYOUT->value . "/dashboard/article/index.php";
 
 		include Path::LAYOUT->value . "/footer.php";
 	}

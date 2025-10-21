@@ -1,10 +1,7 @@
 <?php
 	use App\Enums\Path;
-	use App\Models\Repositories\LanguageRepository;
 	use Tempora\Utils\Cache\Route;
 	use Tempora\Utils\Lang;
-
-	$languages = LanguageRepository::getAllLangs();
 
 	include Path::COMPONENT_ACTIONS->value . "/navbar.php";
 
@@ -26,7 +23,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<?php foreach ($categoryList as $category) { ?>
+		<?php foreach ($categoriesList as $category) { ?>
 			<tr>
 				<td><?= $category["name"] ?></td>
 				<td><?= $category["uri"] ?></td>
